@@ -23,7 +23,11 @@ public class Article {
     private boolean isArticleDeleted;
     private boolean isArticleEdited;
 
-    public Article create(Long articleId, String title, String content, Long userId, List<String> contentImages) {
+    public void incrementId(Long articleId) {
+        this.articleId = articleId;
+    }
+
+    public static Article create(Long articleId, String title, String content, Long userId, List<String> contentImages) {
         Article article = new Article();
         article.articleId = articleId;
         article.title = title;
