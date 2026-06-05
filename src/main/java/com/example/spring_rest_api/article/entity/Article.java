@@ -22,6 +22,11 @@ public class Article {
     private LocalDateTime deletedAt;
     private boolean isArticleDeleted;
     private boolean isArticleEdited;
+    private boolean isArticleHidden;
+    private Long reportCount;
+    private Long articleLikeCount;
+    private Long articleViewCount;
+    private Long commentCount;
 
     public static Article create(Long articleId, String title, String content, Long userId, List<String> contentImages) {
         Article article = new Article();
@@ -37,6 +42,11 @@ public class Article {
         article.deletedAt = null;
         article.isArticleDeleted = false;
         article.isArticleEdited = false;
+        article.isArticleHidden = false;
+        article.reportCount = 0L;
+        article.articleLikeCount = 0L;
+        article.articleViewCount = 0L;
+        article.commentCount = 0L;
         return article;
     }
 

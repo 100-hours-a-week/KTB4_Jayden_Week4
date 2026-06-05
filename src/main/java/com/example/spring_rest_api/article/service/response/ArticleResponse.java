@@ -22,6 +22,11 @@ public class ArticleResponse {
     private LocalDateTime deletedAt;
     private boolean isArticleDeleted;
     private boolean isArticleEdited;
+    private boolean isArticleHidden;
+    private Long reportCount;
+    private Long articleLikeCount;
+    private Long articleViewCount;
+    private Long commentCount;
 
     public static ArticleResponse from(Article article) {
         ArticleResponse response = new ArticleResponse();
@@ -37,6 +42,11 @@ public class ArticleResponse {
         response.deletedAt = article.getDeletedAt();
         response.isArticleDeleted = article.isArticleDeleted();
         response.isArticleEdited = article.isArticleEdited();
+        response.isArticleHidden = article.isArticleHidden();
+        response.reportCount = article.getReportCount();
+        response.articleLikeCount = article.getArticleLikeCount();
+        response.articleViewCount = article.getArticleViewCount();
+        response.commentCount = article.getCommentCount();
         return response;
     }
 }
