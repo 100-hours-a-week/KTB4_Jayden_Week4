@@ -1,13 +1,18 @@
 package com.example.spring_rest_api.user.service.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
 public class UserCreateRequest {
+    @Email(message = "이메일을 입력해주세요.")
     private String email;
+    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", message = "비밀번호는 8~20자 영문 대소문자, 숫자, 특수문자를 사용하세요.")
     private String password;
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$", message = "닉네임은 특수문자를 제외한 2~10자리여야 합니다.")
     private String nickname;
     private String profileImage;
 }

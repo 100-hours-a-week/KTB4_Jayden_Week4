@@ -4,6 +4,7 @@ import com.example.spring_rest_api.user.service.UserService;
 import com.example.spring_rest_api.user.service.request.UserCreateRequest;
 import com.example.spring_rest_api.user.service.request.UserUpdateRequest;
 import com.example.spring_rest_api.user.service.response.UserResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/users")
-    public UserResponse create(@RequestBody UserCreateRequest request) {
+    public UserResponse create(@Valid @RequestBody UserCreateRequest request) {
         return userService.create(request);
     }
 
@@ -23,12 +24,12 @@ public class UserController {
     }
 
     @PatchMapping("/users/{userId}")
-    public UserResponse updateInformation(@PathVariable Long userId, @RequestBody UserUpdateRequest request) {
+    public UserResponse updateInformation(@PathVariable Long userId, @Valid @RequestBody UserUpdateRequest request) {
         return userService.updateInformation(userId, request);
     }
 
     @PatchMapping("/users/{userId}/password")
-    public UserResponse updatePassword(@PathVariable Long userId, @RequestBody UserUpdateRequest request) {
+    public UserResponse updatePassword(@PathVariable Long userId, @Valid @RequestBody UserUpdateRequest request) {
         return userService.updatePassword(userId, request);
     }
 

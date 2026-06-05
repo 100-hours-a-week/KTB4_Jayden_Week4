@@ -1,5 +1,6 @@
 package com.example.spring_rest_api.user.entity;
 
+import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
