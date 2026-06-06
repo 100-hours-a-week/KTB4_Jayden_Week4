@@ -10,29 +10,29 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 @RequiredArgsConstructor
 public class ArticleLikeMemoryRepository {
-    // <userId, ArticleLike>
+    // <articleLikeId, ArticleLike>
     private final Map<Long, ArticleLike> articleLikeStorage =  new ConcurrentHashMap<>();
+
+    public ArticleLike findById(Long articleLikeId) {
+        return articleLikeStorage.get(articleLikeId);
+    }
 
     public ArticleLike findByArticleIdAndUserId(Long articleId, Long userId) {
         return articleLikeStorage.entrySet().stream()
-                .filter(entry -> entry.getKey().equals(articleId))
-                .filter(entry -> entry.getValue().getUserId().equals(userId))
-                .findAny()
+                .filter(entry ->
+                        entry.getValue().getArticleId().equals(articleId) &&
+                                entry.getValue().getUserId().equals(userId)
+                )
+                .findFirst()
                 .map(Map.Entry::getValue)
-                .orElseThrow();
+                .orElse(null);
     }
 
-    public void save(Long articleId, Long userId) {
-        articleLikeStorage.put(userId, ArticleLike.create(articleId, userId));
+    public ArticleLike save(ArticleLike articleLike) {
+        return articleLikeStorage.put(articleLike.getArticleLikeId(), articleLike);
     }
 
-    public void delete(Long articleId, Long userId) {
-        articleLikeStorage.entrySet().stream()
-                .filter(entry -> entry.getKey().equals(articleId))
-                .filter(entry -> entry.getValue().getUserId().equals(userId))
-                .findAny()
-                .map(entry -> entry.getValue().delete())
-                .map(articleLike -> articleLikeStorage.put(articleId, articleLike))
-                .orElseThrow();
+    public void delete(ArticleLike articleLike) {
+        articleLikeStorage.remove(articleLike.getArticleLikeId());
     }
 }

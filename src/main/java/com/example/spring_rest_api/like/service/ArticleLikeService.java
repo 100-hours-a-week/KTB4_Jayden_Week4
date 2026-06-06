@@ -1,5 +1,7 @@
 package com.example.spring_rest_api.like.service;
 
+import com.example.spring_rest_api.common.exception.BadRequestException;
+import com.example.spring_rest_api.like.entity.ArticleLike;
 import com.example.spring_rest_api.like.repository.ArticleLikeCountMemoryRepository;
 import com.example.spring_rest_api.like.repository.ArticleLikeMemoryRepository;
 import com.example.spring_rest_api.like.service.response.ArticleLikeCountResponse;
@@ -11,11 +13,20 @@ import org.springframework.stereotype.Service;
 public class ArticleLikeService {
     private final ArticleLikeMemoryRepository articleLikeMemoryRepository;
     private final ArticleLikeCountMemoryRepository articleLikeCountMemoryRepository;
-
+    private Long sequence = 0L;
 
     public ArticleLikeCountResponse like(Long articleId, Long userId) {
-        articleLikeMemoryRepository.save(articleId, userId);
-        articleLikeCountMemoryRepository.increase(articleId);
+        if (articleLikeMemoryRepository.findByArticleIdAndUserId(articleId, userId) == null) {
+            articleLikeMemoryRepository.save(ArticleLike.create(
+                    sequence++,
+                    articleId,
+                    userId
+            ));
+            articleLikeCountMemoryRepository.increase(articleId);
+        } else {
+            throw new BadRequestException("like_bad_request");
+        }
+
         return ArticleLikeCountResponse.from(
                 articleId,
                 articleLikeCountMemoryRepository.read(articleId)
@@ -23,8 +34,13 @@ public class ArticleLikeService {
     }
 
     public ArticleLikeCountResponse unlike(Long articleId, Long userId) {
-        articleLikeMemoryRepository.delete(articleId, userId);
-        articleLikeCountMemoryRepository.decrease(articleId);
+        ArticleLike findArticleLike = articleLikeMemoryRepository.findByArticleIdAndUserId(articleId, userId);
+        if (findArticleLike != null) {
+            articleLikeMemoryRepository.delete(findArticleLike);
+            articleLikeCountMemoryRepository.decrease(articleId);
+        } else {
+            throw new BadRequestException("unlike_bad_request");
+        }
         return ArticleLikeCountResponse.from(
                 articleId,
                 articleLikeCountMemoryRepository.read(articleId)
