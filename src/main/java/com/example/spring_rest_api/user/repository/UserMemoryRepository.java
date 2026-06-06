@@ -25,7 +25,7 @@ public class UserMemoryRepository {
     }
 
     public User delete(Long userId) {
-        User deleted = userStorage.get(userId).delete();
+        User deleted = findById(userId).delete();
         return userStorage.put(userId, deleted);
     }
 }
