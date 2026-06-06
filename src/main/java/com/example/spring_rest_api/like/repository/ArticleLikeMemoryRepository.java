@@ -13,10 +13,6 @@ public class ArticleLikeMemoryRepository {
     // <articleLikeId, ArticleLike>
     private final Map<Long, ArticleLike> articleLikeStorage =  new ConcurrentHashMap<>();
 
-    public ArticleLike findById(Long articleLikeId) {
-        return articleLikeStorage.get(articleLikeId);
-    }
-
     public ArticleLike findByArticleIdAndUserId(Long articleId, Long userId) {
         return articleLikeStorage.entrySet().stream()
                 .filter(entry ->
