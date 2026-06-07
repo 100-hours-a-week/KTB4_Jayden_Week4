@@ -15,9 +15,9 @@ public class ArticleLikeMemoryRepository {
 
     public ArticleLike findByArticleIdAndUserId(Long articleId, Long userId) {
         return articleLikeStorage.values().stream()
-                .filter(entry ->
-                        entry.getArticleId().equals(articleId) &&
-                                entry.getUserId().equals(userId)
+                .filter(articleLike ->
+                        articleLike.getArticleId().equals(articleId) &&
+                                articleLike.getUserId().equals(userId)
                 )
                 .findFirst()
                 .orElse(null);
