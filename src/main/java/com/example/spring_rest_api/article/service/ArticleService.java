@@ -47,7 +47,7 @@ public class ArticleService {
                 userId,
                 request.getTitle(),
                 request.getContent(),
-                request.getUserId(),
+                userId,
                 request.getContentImages()
         ));
     }
