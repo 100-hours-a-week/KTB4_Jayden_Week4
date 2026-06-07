@@ -38,7 +38,7 @@ public class ArticleController {
     @PutMapping("/articles/temp-save/{userId}")
     public ResponseEntity<?> saveTempArticle(@PathVariable Long userId, @Valid @RequestBody ArticleUpdateRequest request) {
         articleService.saveTempArticle(userId, request);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/articles/temp-save/{userId}")
