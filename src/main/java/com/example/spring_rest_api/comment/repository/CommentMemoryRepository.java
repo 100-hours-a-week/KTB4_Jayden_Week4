@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -52,9 +53,22 @@ public class CommentMemoryRepository {
                 .filter(comment -> comment.getArticleId().equals(articleId))
                 .sorted(comparing(Comment::getParentCommentId, nullsFirst(naturalOrder()))
                         .thenComparing(Comment::getCommentId))
-                .filter(comment -> (comment.getParentCommentId() > lastParentCommentId) ||
-                        (comment.getParentCommentId().equals(lastParentCommentId) && comment.getCommentId() >= lastCommentId))
+                .filter(comment -> isAfterLastComment(comment, lastParentCommentId, lastCommentId))
                 .limit(pageSize)
                 .toList();
     }
+
+    private boolean isAfterLastComment(Comment comment, Long lastParentCommentId, Long lastCommentId) {
+        if (Objects.equals(comment.getParentCommentId(), lastParentCommentId)) {
+            return comment.getCommentId() > lastCommentId;
+        }
+        if (lastParentCommentId == null) {
+            return true;
+        }
+        return comment.getParentCommentId() > lastParentCommentId;
+
+
+
+    }
+
 }

@@ -26,7 +26,6 @@ public class CommentService {
 
     public CommentResponse create(Long articleId, CommentCreateRequest request) {
         throwIfArticleIsAbsent(articleId);
-        throwIfParentCommentIdIsAbsent(request);
 
         commentCountMemoryRepository.increase(articleId);
         return CommentResponse.from(commentMemoryRepository.save(Comment.create(
@@ -67,7 +66,7 @@ public class CommentService {
     }
 
     public List<CommentResponse> readAllInfiniteScroll(Long articleId, Long pageSize, Long lastParentCommentId, Long lastCommentId) {
-        return (lastParentCommentId == null || lastCommentId == null) ?
+        return (lastParentCommentId == null && lastCommentId == null) ?
                 commentMemoryRepository.findAllInfiniteScroll(articleId, pageSize).stream()
                 .map(CommentResponse::from)
                 .toList() :
@@ -87,12 +86,6 @@ public class CommentService {
     private void throwIfArticleIsAbsent(Long articleId) {
         if (articleMemoryRepository.findById(articleId) == null) {
             throw new NotFoundException("ARTICLE_NOT_FOUND");
-        }
-    }
-
-    private void throwIfParentCommentIdIsAbsent(CommentCreateRequest request) {
-        if (commentMemoryRepository.findById(request.getParentCommentId()) == null) {
-            throw new NotFoundException("COMMENT_NOT_FOUND");
         }
     }
 }
