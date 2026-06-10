@@ -40,10 +40,14 @@ public class ArticleMemoryRepository {
     public List<Article> findAllInfiniteScroll(Long pageSize, Long lastArticleId) {
         return lastArticleId == null ?
                 articleStorage.entrySet().stream()
+                .filter(entry -> !entry.getValue().isArticleDeleted())
+                .filter(entry -> !entry.getValue().isArticleHidden())
                 .limit(pageSize)
                 .map(Map.Entry::getValue)
                 .toList() :
                 articleStorage.entrySet().stream()
+                .filter(entry -> !entry.getValue().isArticleDeleted())
+                .filter(entry -> !entry.getValue().isArticleHidden())
                 .filter(entry -> entry.getKey() < lastArticleId)
                 .limit(pageSize)
                 .map(Map.Entry::getValue)
